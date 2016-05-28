@@ -8,13 +8,19 @@ from ricker import Ricker
 import numpy as np
 from modeling import ConvModel
 import matplotlib.pyplot as plt
+import json
 r = np.zeros(500)
-r[100] = 1.0
-r[200] = 0.5
-r[300] = 1.0
+r[100] = 0.3
+r[200] = -0.5
+r[300] = 0.65
 
 w = Ricker(128, 0.004, 25.0)
 tr = ConvModel(r, w)
 
-plt.plot(tr)
+data = {'data':list(tr)}
+print(type(data['data']))
+
+with open('../Data/Model1.txt', 'w') as outfile:
+    json.dump(data, outfile)
+plt.plot(data['data'])
 
