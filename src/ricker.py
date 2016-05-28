@@ -17,7 +17,7 @@ def Ricker(ns, dt,fp, A=1.0):
     pulso: wavelet de ricker (array)
     '''
 
-    delay = ns/2
+    delay = (ns-1)/2
   
     t = np.arange(0,ns,1)*dt - delay*dt
     pulso=A*(1.-2.*(np.pi*fp*t)**2.)*np.exp(-1.*(np.pi*fp*t)**2.)

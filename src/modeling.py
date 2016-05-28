@@ -7,6 +7,9 @@ Created on Sat May 28 07:07:29 2016
 import numpy as np
 '''
 ####Functions####
+Function Noise: creates gaussian noise. The standard deviaton is a
+    percentage of the maximum absolut amplitude.
+    
 ConvModel: uses convolution to create a synthetic seismic trace.
 
 GetR: calculate reflection coeficient for each interface.
@@ -16,7 +19,28 @@ GetI: get impedance from de reflection coeficients.
 
 ##############
 '''
-def ConvModel(r, w):
+
+def Noise(trace, perc=0.01):
+    '''
+    Function Noise: creates gaussian noise. The standard deviaton is a
+    percentage of the maximum absolut amplitude.
+    
+    Input:
+    trace: seismic trace (array)
+    perc: percedntage (scalar)
+    
+    Output:
+    noise: noise (array)
+    '''
+    perc = perc/100.0
+    std = perc*max(abs(trace)) #standard
+    ns = len(trace) #number of samples
+    noise = np.random.normal(0.0, std, ns)
+    
+    return noise
+
+
+def ConvModel(r, w, perc=1.0):
     '''
     Function ConvModel: uses convolution to create a synthetic seismic
     trace.
@@ -29,7 +53,7 @@ def ConvModel(r, w):
     tr: synthetic seismic trace (Array)
     '''    
     tr = np.convolve(r, w, 'same')
-    
+    tr = tr + Noise(tr, perc=1.0)
     return tr
     
 def GetR(I):
@@ -77,21 +101,28 @@ def GetI(r,Ib):
         
     return I
     
-def Noise(trace, perc=0.01):
+def RandModel(nr, ns=500):
+    
     '''
-    Function Noise: creates gaussian noise. The standard deviaton is a
-    percentage of the maximum absolut amplitude.
+    Function RandModel: create a Random reflectivity sequence. Position
+    is also random.
     
     Input:
-    trace: seismic trace (array)
-    perc: percedntage (scalar)
+    nr: number reflection coeficients (scalar)
+    ns: number of samples (scalar)
     
     Output:
-    noise: noise (array)
+    R: reflectivity sequence (array)
     '''
     
-    std = perc*max(abs(trace)) #standard
-    ns = len(trace) #number of samples
-    noise = np.random.normal(0.0, std, ns)
-    
-    return noise
+    r = np.random.normal(0.0, 0.5,nr)
+    R = np.zeros(ns)
+
+    for i in range(nr):
+        pos = abs(np.random.normal(0.0, ns, 1))
+        while pos>=ns:
+           pos = abs(np.random.normal(0.0, ns, 1))
+
+        R[int(pos)] = r[i]
+        
+    return R
