@@ -2,26 +2,28 @@
 <html>
 	<head>
 		<title>Human Inverson</title>
-		<link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap-min.css">
-		<script src="components/jquery/jquery.min.js"></script>
-		<script src="components/bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="styles.css">
+		<script src="components/jquery/dist/jquery.min.js"></script>
+		<script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="components/angular/angular.min.js"></script>
+		<script src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
+		<script src="app.js"></script>
 	</head>
-	<body>
+	<body ng-app="hinv">
 		<div class="container">
-			<div class="hero_unit">
+			<div class="hero">
 				<h1>Human Inversion</h1>
 			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<p>Choose you difficulty level:</p>
-					<ol>
-						<li>Easy Peasy</li>
-						<li>Dazed and Confused</li>
-						<li>Multiple Insanity</li>
-					</ol>
-				</div>
-			</div>
+			<ui-view>
 		</div>	
+
+		<script>
+			$(document).ready(function() {
+				
+				
+				
+			})
+		</script>
 	</body>
 </html>
