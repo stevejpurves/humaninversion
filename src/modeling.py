@@ -76,3 +76,22 @@ def GetI(r,Ib):
         I[i] = I[i-1]*(1.0+r[i-1])/(1.0-r[i-1])
         
     return I
+    
+def Noise(trace, perc=0.01):
+    '''
+    Function Noise: creates gaussian noise. The standard deviaton is a
+    percentage of the maximum absolut amplitude.
+    
+    Input:
+    trace: seismic trace (array)
+    perc: percedntage (scalar)
+    
+    Output:
+    noise: noise (array)
+    '''
+    
+    std = perc*max(abs(trace)) #standard
+    ns = len(trace) #number of samples
+    noise = np.random.normal(0.0, std, ns)
+    
+    return noise
