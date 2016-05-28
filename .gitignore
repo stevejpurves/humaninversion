@@ -1,2 +1,4 @@
 static/components
 *.ipynb*
+
+*.pyc
