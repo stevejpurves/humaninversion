@@ -29,32 +29,47 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     });
 });
  
-myApp.controller('GameController',function($scope, $stateParams) {
+myApp.controller('GameController',function($scope, $stateParams, $http) {
   
   $scope.seismic = [];
-  for (var i = 0; i < 256; i++) {
-    $scope.seismic.push(Math.sin(2*Math.PI*i/64))
-  }
+  $scope.model = [];
+  // for (var i = 0; i < 256; i++) {
+  //   $scope.seismic.push(Math.sin(2*Math.PI*i/64))
+  // }
   
-  var wigglePlot = g3.plot('#realseismic')
-    .height(400)
-    .xDomain([-1, 1])
-    .yDomain([0, 256])
-    .draw();
+  $http({method: 'GET', url: '/api/model/1'})
+    .then(function(response) {
+      $scope.seismic = response.data.seismic;
+      $scope.model = response.data.model;
+      
+    var wigglePlot = g3.plot('#realseismic')
+      .height(400)
+      .xDomain([-1, 1])
+      .yDomain([0, $scope.seismic.length])
+      .draw();
+    
+    var wig = g3.wiggle(wigglePlot, [$scope.seismic])
+      .xTrans(0)
+      .draw();
   
-  var wig = g3.wiggle(wigglePlot, [$scope.seismic])
-    .xTrans(0)
-    .draw();
+    var wigglePlot = g3.plot('#userseismic')
+      .height(400)
+      .xDomain([-1, 1])
+      .yDomain([0, $scope.seismic.length])
+      .draw();
+    
+    var wig = g3.wiggle(wigglePlot, [$scope.seismic])
+      .xTrans(0)
+      .draw();
+      
+      
+      
+    }, function(response) {
+      alert(response.error)
+    })
+  
+  
 
-  var wigglePlot = g3.plot('#userseismic')
-    .height(400)
-    .xDomain([-1, 1])
-    .yDomain([0, 256])
-    .draw();
-  
-  var wig = g3.wiggle(wigglePlot, [$scope.seismic])
-    .xTrans(0)
-    .draw();
 
   
   $scope.tries = 5;
