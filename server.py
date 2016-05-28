@@ -2,6 +2,19 @@ from flask import Flask, request, send_from_directory
 
 app = Flask(__name__, static_url_path='')
 
+
+@app.route('/api/model/:id')
+def get_model():
+  pass
+ 
+@app.route('/api/seismic/:id')
+def get_seismic():
+  pass
+
+@app.route('/api/forward/:id')
+def get_forward_model():
+  pass
+
 @app.route('/')
 def root():
     return app.send_static_file('index.html');
