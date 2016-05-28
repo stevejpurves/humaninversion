@@ -17,10 +17,10 @@ r[300] = 0.65
 w = Ricker(128, 0.004, 25.0)
 tr = ConvModel(r, w)
 
-data = {'data':list(tr)}
-print(type(data['data']))
+data = {'seismic':list(tr), 'model':list(r)}
+
 
 with open('../Data/Model1.txt', 'w') as outfile:
     json.dump(data, outfile)
-plt.plot(data['data'])
+plt.plot(data['seismic'])
 
