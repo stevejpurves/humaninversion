@@ -1,28 +1,29 @@
 from flask import Flask, request, send_from_directory, jsonify
+import json
 import numpy as np;
 
 app = Flask(__name__, static_url_path='')
 
+
+the_seismic = [1, 1, 0, 0, -1, -1, 0, 0, 1, 1];
 # dummy stuff
-the_model = [1, 1, 0, 0, -1, -1, 0, 0, 1, 1];
-the_seismic = the_model;
+def dummySeismicGenerator(r):
+  return {'seismic': [1,2,3], 'min': -10, 'max': 10}
 
 @app.route('/api/model/<levelid>')
 def get_model(levelid):
   filename = 'Model' + str(levelid) + '.txt';
-  return app.send_static_file('Data/' + filename);
- 
-@app.route('/api/seismic/<levelid>')
-def get_seismic(levelid):
-  return jsonify(model=the_model);
+  return app.send_static_file('Data/' + filename)
 
-@app.route('/api/forward')
+@app.route('/api/forward', methods=['POST'])
 def get_forward_model():
-  pass
+  r = request.json['usermodel']
+  tr = dummySeismicGenerator(r)
+  return jsonify(tr)
 
 @app.route('/')
 def root():
-    return app.send_static_file('index.html');
+  return app.send_static_file('index.html')
 
 @app.route('/<path:path>')
 def static_proxy(path):
