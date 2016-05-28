@@ -126,3 +126,28 @@ def RandModel(nr, ns=500):
         R[int(pos)] = r[i]
         
     return R
+    
+def MarineRandModel(nr, ns=500, fstlayer=25):
+    '''
+    Function RandModel: create a Random reflectivity sequence. Position
+    is also random.
+    
+    Input:
+    nr: number reflection coeficients (scalar)
+    ns: number of samples (scalar)
+    
+    Output:
+    R: reflectivity sequence (array)
+    '''
+    nr = nr-1 #Discounting one because seabad is already considered
+    r = np.random.normal(0.0, 0.5,nr)
+    R = np.zeros(ns)
+    R[fstlayer] = 0.3
+    for i in range(nr):
+        pos = abs(np.random.normal(0.0, ns, 1))
+        while pos>=ns or pos<=fstlayer:
+           pos = abs(np.random.normal(0.0, ns, 1))
+
+        R[int(pos)] = r[i]
+        
+    return R

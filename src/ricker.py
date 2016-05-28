@@ -3,24 +3,28 @@
 
 
 import pylab as np
+from signalanalysis import Rotation
 
-def Ricker(ns, dt,fp, A=1.0):
+def Ricker(ns, dt,fp, phase=0.0, A=1.0):
     
     '''
-    Entrada:
-    ns - Numero de amostras (escalar)
-    dt - interlavo de amostragem (escalar, segundos)
-    fp - frequencia de pico (escalar, Hz)
-    A  - fator de escala da amplitude (escalar)
+    Function Ricker: create Ricker wavelet
     
-    Saida:
-    pulso: wavelet de ricker (array)
+    Input:
+    ns - number os samples (scalar)
+    dt - sampling interval (scalar, seconds)
+    fp - peak frequency (scalar, Hz)
+    phase - angle (scalar, unit: degree)
+    A  - amplitude scaling factor (scalar)
+    
+    Output:
+    pulse: ricker wavelet (array)
     '''
-
+    phase = np.rad2deg(phase)
     delay = (ns-1)/2
   
     t = np.arange(0,ns,1)*dt - delay*dt
-    pulso=A*(1.-2.*(np.pi*fp*t)**2.)*np.exp(-1.*(np.pi*fp*t)**2.)
-
-    return pulso
+    pulse=A*(1.-2.*(np.pi*fp*t)**2.)*np.exp(-1.*(np.pi*fp*t)**2.)
+    pulse = Rotation(pulse, phase)
+    return pulse
 

@@ -166,4 +166,36 @@ def fft1D(d,n=1, dt=1e-3,nsfft=0, tmax=-1):
   
   return (x,y,maxX)
     
-        
+def Envelope(d):
+    
+    '''
+    Envelope: Calculated using analytic signal.
+    
+    Input:
+    d: seismic trace (array)
+    
+    Output:
+    amp: envelope.
+    '''
+    asig = hilbert(d) #Analytic signal
+   
+    amp = abs(asig)
+    
+    return amp
+    
+def CosPhase(d):
+    
+    '''
+    CosPhase: Cosine of instantaneous phase. Calculated using analytic signal.
+    
+    Input:
+    d: seismic trace (array)
+    
+    Output:
+    amp: cosine of instantaneous phase.
+    '''
+    asig = hilbert(d) #Analytic signal
+   
+    cosphase = np.cos(np.angle(asig))
+    
+    return cosphase
