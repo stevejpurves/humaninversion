@@ -1,5 +1,31 @@
 <div class="row">
 	<div class="col-xs-12">
-		<div id="gamearea"></div>
+		<div id="gamearea">
+			<div id="realseismic" class="graphbox">
+				<h4>Seismic</h4>
+				<div id="seismic"></div>
+			</div>
+			<div id="usermodel" class="graphbox">
+				<h4>User's Model</h4>
+			</div>
+			<div id="userseismic" class="graphbox">
+				<h4>User's Seismic</h4>
+				</div>
+			<div id="model" class="graphbox">
+				<h4>Real Model</h4>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 text-right controls">
+		<div id="tries" ng-if='tries>0'>
+			You need to 
+			<button class="btn btn-danger">Run Your Model</button>
+			<span id="triesLeft">to see seismic generated from your inversion, but you only have {{tries}} tries left!</span>
+		</div>
+		<div id="reveal" ng-if='tries==0'>
+			Now you can reveal the true model <button class="btn btn-danger">Reveal</button>
+		</div>
 	</div>
 </div>

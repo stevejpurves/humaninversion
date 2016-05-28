@@ -1,4 +1,16 @@
 #gamearea {
-	background-color: green;
-	height: 500px;
+	background-color: lightsteelblue;
+	height: 600px;
+}
+
+.graphbox {
+	float:left;
+	background-color: pink;
+	width: 24%;
+	height: 95%;
+	margin: 5px;
+}
+
+.controls {
+	padding-top: 10px;
 }

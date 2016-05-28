@@ -1,17 +1,21 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify
+import numpy as np;
 
 app = Flask(__name__, static_url_path='')
 
+# dummy stuff
+the_model = [1, 1, 0, 0, -1, -1, 0, 0, 1, 1];
+the_seismic = the_model;
 
-@app.route('/api/model/:id')
-def get_model():
-  pass
+@app.route('/api/model/<levelid>')
+def get_model(levelid):
+  return jsonify(model=the_model);
  
-@app.route('/api/seismic/:id')
-def get_seismic():
-  pass
+@app.route('/api/seismic/<levelid>')
+def get_seismic(levelid):
+  return jsonify(model=the_model);
 
-@app.route('/api/forward/:id')
+@app.route('/api/forward')
 def get_forward_model():
   pass
 
@@ -25,4 +29,4 @@ def static_proxy(path):
   return app.send_static_file(path)
     
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

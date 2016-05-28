@@ -1,4 +1,4 @@
-var myApp = angular.module('hinv', ['ui.router']);
+var myApp = angular.module('hinv', ['ui.router','n3-line-chart']);
 
 myApp.config(function($stateProvider, $urlRouterProvider) {
   //
@@ -14,9 +14,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     .state('game', {
       url: "/game/:level",
       templateUrl: "partials/game.html",
-      controller: function($scope, $stateParams) {
-        console.log("level", $stateParams.level)
-      }
+      controller: 'GameController'
     })
     .state('test', {
       url: "/test",
@@ -30,3 +28,59 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       }
     });
 });
+ 
+myApp.controller('GameController',function($scope, $stateParams) {
+  
+  $scope.seismic = [];
+  for (var i = 0; i < 256; i++) {
+    $scope.seismic.push(Math.sin(2*Math.PI*i/64))
+  }
+  
+  var wigglePlot = g3.plot('#realseismic')
+    .height(400)
+    .xDomain([-1, 1])
+    .yDomain([0, 256])
+    .draw();
+  
+  var wig = g3.wiggle(wigglePlot, [$scope.seismic])
+    .xTrans(0)
+    .draw();
+
+  var wigglePlot = g3.plot('#userseismic')
+    .height(400)
+    .xDomain([-1, 1])
+    .yDomain([0, 256])
+    .draw();
+  
+  var wig = g3.wiggle(wigglePlot, [$scope.seismic])
+    .xTrans(0)
+    .draw();
+
+  
+  $scope.tries = 5;
+  
+  $scope.data = {
+    seismic: [
+      {x:0, val_0: 10},
+      {x:1, val_0: 15},
+      {x:2, val_0: 18}
+    ]
+  };
+  
+  $scope.seismicOptions = {
+      series: [
+        {
+          axis: "x",
+          dataset: "seismic",
+          key: "val_0",
+          label: "Seismic Series",
+          color: "#ff0000",
+          type: ['column'],
+          id: "seismic",
+          visible:true
+        }
+      ],
+      axes: { y: { key: "x"} }
+  };
+
+})
