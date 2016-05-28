@@ -4,24 +4,18 @@ Created on Fri Jan 08 11:01:38 2016
 
 @author: cassis
 
-Descrição: biblioteca contendo função para analise de sinais
+Description: functions for signal analysis
 
-######################IMPLEMENTAÇÕES###########################################
-*Função Rotação: Rotaciona um sinal
+######################FUNCTIONS################################################
+Rotation: signal rotation.
 
-*Função Convolucao: convolução de um sinal w com um sinal R.
+Smooth: smooth an array.
 
-*Função RMS: calcula o valor RMS de cada amostra sempre partindo do inicio do array
-    
-*Função Smooth: suaviza um vetor.
+Timeshift: shift a whole array some samples.
 
-*Função Timeshift: desloca um vetor determinado numero de amostras. O padrão
-    é um deslocamento para a direita.
-    
-*Função xcorr2: calcula a correção de dois sinais x e y. Ou a autocorrelação
-  de um sinal x.
-  
-*Função BandPass: filtro passa-banda trapezoidal.  Observação: f1<f2<f3<f4
+Timeshift: shift a whole array some samples.
+
+fft1D: applies FFT to an array.
 
 ###############################################################################
 """
@@ -31,97 +25,62 @@ from scipy.signal import hilbert
 import matplotlib.pyplot as plt
 
 
-def Rotacao(w,fase):
+def Rotation(w,phase):
     '''
-    Função Rotação: Rotaciona um sinal
+    Function Rotation: signal rotation.
     
-    #Entrada:
-    w: sinal
-    fase: fase em radianos
+    Input:
+    w: signal (array)
+    phase: phase rotation (scalar, unit: radians)
     
-    #Saida:
-    w_rot: wavelet rotacionada
+    Outpout:
+    w_rot: rotated signal (array)
     '''  
-    hw = hilbert(w) #Transformada de Hilbert        
-    wrot = w*np.cos(fase) + hw.imag*np.sin(fase) #Aplica a rotação
+    hw = hilbert(w) #Returns analytic signal        
+    wrot = w*np.cos(phase) + hw.imag*np.sin(phase) #Applies rotation
         
     return wrot
     
  
-def Convolucao(R, w):
-    '''
-    Função Convolucao: convolução de um sinal w com um sinal R.
-    Entrada:
-    R: série refletividades (array)
-    w: wavelet (array)    
-    
-    Saida:
-    tr: resultado da convolução, mantem o tamanho original de R
-    '''   
-    
-    tr=np.convolve(w, R, 'same')
-    return tr
-   
-
-
-def RMS(v):
-    
-    '''
-    Função RMS: calcula o valor RMS de cada amostra sempre partindo do inicio 
-    do array
-    
-    Entrada:
-    v: array 1D
-    
-    Saida:
-    vrms: valor rms para cada amostra de v (array)
-    '''
-    n = np.arange(len(v))+1
-    vrms = np.sqrt(np.cumsum(v**2.0)/n)
-    
-    return vrms     
-        
 
 def Smooth (sig,n):
     
     '''
-    Função Smooth: suaviza um vetor.
+    Function Smooth: smooth an array.
     
-    Entrada: 
-    sig: sinal (array)
-    n:numero de amostra do operador de suavização
+    Input: 
+    sig: signal (array)
+    n:number of samples of the smooth operator (scalar)
     
-    Saida:
-    smt: signal suavizado
+    Output:
+    smt: smoothed signal (array)
     '''
     
-    ns = len(sig) #Numero de amostras de sig
+    ns = len(sig) #number of samples
     
-    tmp = np.zeros(ns+2*n) #Cria vetor extendido
-    
-	#Atribui sig ao array tmp
-    tmp[:(n-1)] = sig[0]
-    tmp[(ns-1):] = sig[-1]
-    tmp[(n-1):(ns+n-1)] = sig
+
    
-    win = np.ones(n)/n #Operador de suavização
+    win = np.ones(n) #smoothing window
     
-    smt = np.convolve(tmp,win,'same') #Aplica a suavização
+    smt = np.convolve(sig, win,'same') 
     
-    smt = smt[n:(ns+n)] #Mantem o mesmo numero de amostras do vetor sig de entrada.
+    norm = np.ones(ns)*n
+    norm[:n] = np.arange(1, n)
+    norm[(ns-n):] = np.arange(n,1,-1)
+
+    smt = smt/norm
     return smt
 
 def Timeshift(sig, nt):
     '''
-    Função Timeshift: desloca um vetor determinado numero de amostras. O padrão
-    é um deslocamento para a direita.
+    Function Timeshift: shift a whole array some samples.
     
-    Entrada:
-    sig: sinal (array)
-    nt: numero de amostras a serem deslocadas (escalar)
+    Input:
+    sig: signal (array)
+    nt: number of samples to shift the array (scalar)
     
-    Saida:
-    sigout: sinal deslocado nt amostras (array)
+    Output:
+    sigout: shifted signal (array)
     '''    
     ns = len(sig)
     sigf = np.fft.fft(sig)
@@ -137,15 +96,14 @@ def Timeshift(sig, nt):
 def xcorr2(x,y=None):
 
   '''
-  Função xcorr2: calcula a correção de dois sinais x e y. Ou a autocorrelação
-  de um sinal x.
+  Function xcorr2: calculate the correlation of two signals x and y.
     
-  Entrada:
-  x: sinal x (array)
-  y: sinal y (array)
+  Input:
+  x: signal x (array)
+  y: signal y (array)
     
-  Saida:
-  out: correlação (array)
+  Output:
+  out: correlation (array)
   '''
   if y is None:
       y=x
@@ -158,85 +116,31 @@ def xcorr2(x,y=None):
   
     if i<ns:
         
-     #print x[(N-ns-i):ns]
-     #print y[:(i+1)]
+
      out[i] = np.dot(x[(N-ns-i):ns],y[:(i+1)])/(i+1)
-    #elif i == ns:
-    # out[i] = np.dot(x,y)
+
     else:
      out[i] = np.dot(x[:(N-i)],y[(i-ns+1):])/(N-i)
 
   return out
   
-def BandPass(sig, dt, f1, f2, f3, f4):
-    '''
-    Função BandPass: filtro passa-banda trapezoidal.
-    Observação: f1<f2<f3<f4
-    
-    Entrada:
-    sig: sinal (array)
-    dt: intervalo de amostragem (escalar, segundos)
-    f1, f2, f3, f4: frequencias em ordem crescrente (escalares, Hz)
-    
-    Sajda:
-    sigbp: sinal filtrado (array)
-    '''             
-    sig = sig.flatten()
-    ns = len(sig)
-    nsf = ns
-    df = 1.0/(ns*dt) 
-    
-    #Garante que a amostragem em frequência sera de pelo menos 1 Hz
-    if df>1.0:
-        nsf = int(round(1.0/dt))
-        df = 1.0
-    fmax = 1.0/(2.0*dt)
-    #print 'df', df    
-    n1 = round(f1/df)
-    n2 = round((f2-f1)/df)
-    n3 = round((f3-f2)/df)
-    n4 = round((f4-f3)/df)
-    n5 = round((fmax-f4)/df)
-
-    nt = n1 + n2 + n3 + n4 + n5    
-    if nt<nsf:
-        n5 = n5 + round((nsf/2-nt))
-    #Cria o filtro
-    filtro = np.concatenate((np.zeros(n1), 
-                             np.linspace(0.,1.0,n2), 
-                             np.ones(n3), 
-                             np.linspace(1.0, 0.,n4),
-                             np.zeros(n5)), axis=0)  
-    filtroshift = np.concatenate((filtro, filtro[::-1]), axis=0)
-    sigf = np.fft.fft(sig, n=nsf) #fft do sinal original
-    amp = np.abs(sigf) #valor absoluto da fft
-    fase = np.arctan2(np.imag(sigf), np.real(sigf)) #fase do sinal
-    
-    ampbp = amp*filtroshift #filtragem
-    
-    sigbp = np.real(np.fft.ifft(ampbp*np.exp(1j*fase), n=nsf))
-    sigbp = np.copy(sigbp[:ns])
-    f = np.linspace(-fmax, fmax, nsf)
-    f = np.fft.fftshift(f)
-
-    return sigbp
     
 def fft1D(d,n=1, dt=1e-3,nsfft=0, tmax=-1):
     
   '''
-  Função fft1D: aplica a transformada de Fourier a vetor.
+  Function fft1D: applies FFT to an array.
   
-  Entrada:
-  d: traço sísmico (array 1D)
-  dt: intervalo de amostragem (escalar, segundos)
-  nsfft: numero de amostras a ser considerado na aplicação da transformada.
-  Este numero deve ser maior que o numero de amostras do vetor de entrada.
-  tmax: ultima amostra do vetor de entrada a ser considerada na transformação.
+  Input:
+  d: seismic trace (array 1D)
+  dt: sampling interval (scalar, seconds)
+  nsfft: number of samples to be considering in the FFT. This number must be
+  greater than the input signal number os samples.
+  tmax: last original array sample to be considered by FFT.
   
-  Saida:
-  x: vetor de frequências (array)
-  y: espectro de amplitude normalizado (array)
-  maxX: frequência de pico (escalar)
+  Output:
+  x: frequencies (array)
+  y: normalized amplitude spectrum (array)
+  maxX: peak frequency (scalar)
 
   '''
   d = d[0:tmax]
@@ -248,14 +152,11 @@ def fft1D(d,n=1, dt=1e-3,nsfft=0, tmax=-1):
   
   ns = len(dft)
   df = 1.0/(ns*dt)
-  #print 'df: %f' %df
   nf = ns/2+1
   x = np.arange(0,nf,1.0)*df
   y = abs(dft[0:nf])
   y = Smooth(y,n)
   
-  #y = 20.0*np.log10(y)+40 #Decibel
-
   ymax = max(y)
   
   idx = list(y).index(ymax)
@@ -263,7 +164,6 @@ def fft1D(d,n=1, dt=1e-3,nsfft=0, tmax=-1):
  
   y = y/ymax
   
-  #y = 20*np.log(y)
   return (x,y,maxX)
     
         

@@ -5,7 +5,17 @@ Created on Sat May 28 07:07:29 2016
 @author: Carlos
 """
 import numpy as np
+'''
+####Functions####
+ConvModel: uses convolution to create a synthetic seismic trace.
 
+GetR: calculate reflection coeficient for each interface.
+    Assumption: normal incidence.
+    
+GetI: get impedance from de reflection coeficients.
+
+##############
+'''
 def ConvModel(r, w):
     '''
     Function ConvModel: uses convolution to create a synthetic seismic
