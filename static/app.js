@@ -43,7 +43,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       $scope.model = response.data.model;
       
     var wigglePlot = g3.plot('#realseismic')
-      .height(400)
+      .height(580)
       .xDomain([-1, 1])
       .yDomain([0, $scope.seismic.length])
       .draw();
@@ -53,7 +53,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       .draw();
   
     var wigglePlot = g3.plot('#userseismic')
-      .height(400)
+      .height(580)
       .xDomain([-1, 1])
       .yDomain([0, $scope.seismic.length])
       .draw();
@@ -72,7 +72,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
 
 
   
-  $scope.tries = 5;
+  $scope.tries = 0;
   
   $scope.data = {
     seismic: [

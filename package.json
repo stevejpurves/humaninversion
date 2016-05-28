@@ -1,0 +1,22 @@
+{
+  "name": "humaninversion",
+  "version": "1.0.0",
+  "description": "## start the server In the root folder     python server.py",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevejpurves/humaninversion.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stevejpurves/humaninversion/issues"
+  },
+  "homepage": "https://github.com/stevejpurves/humaninversion#readme",
+  "dependencies": {
+    "n3-charts": "^2.0.26"
+  }
+}

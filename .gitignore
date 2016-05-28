@@ -1,4 +1,3 @@
-static/components
 *.ipynb*
 *.pyc
 /node_modules/
