@@ -9,7 +9,8 @@ the_seismic = the_model;
 
 @app.route('/api/model/<levelid>')
 def get_model(levelid):
-  return jsonify(model=the_model);
+  filename = 'Model' + str(levelid) + '.txt';
+  return app.send_static_file('Data/' + filename);
  
 @app.route('/api/seismic/<levelid>')
 def get_seismic(levelid):
