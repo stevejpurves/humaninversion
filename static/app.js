@@ -47,23 +47,24 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   $scope.tries = 5;
   $scope.ruler = 0;
   $scope.seismic = [];
-  $scope.model = [];
+  $scope.usermodel = [];
+  $scope.userseismic = [];
+  $scope.realmodel = [];
   
   $http({method: 'GET', url: '/api/model/' + $stateParams.level})
     .then(function(response) {
       $scope.seismic = response.data.seismic;
-      $scope.model = response.data.model;
+      $scope.realmodel = response.data.reflectivity;
       
       plotWiggles('#seismic', $scope.seismic, [-0.6, 0.6]);
       plotWiggles('#userseismic', $scope.seismic, [-0.6, 0.6]);
+      $scope.realModelChart = createBarPlot($scope, '#realmodelchart', $scope.realmodel);
 
     }, function(response) {
       alert(response.error)
     });
   
- var margin = {top: 30, right: 30, bottom: 20, left: 30}; 
-  var width = 270 - margin.left - margin.right,
-    height = 630 - margin.top - margin.bottom;
+    
   
   var dataset = []
   for (var i = 0; i < 300; i++)
@@ -80,17 +81,28 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   dataset[8] = 0.9;
   dataset[9] = -1.0;
  
+  $scope.usermodel = createBarPlot($scope, '#usermodelchart', dataset);
+  
+})
 
-  var svg = d3.select('#usermodelchart')
+function createBarPlot($scope, selector, dataset) {
+   var margin = {top: 30, right: 30, bottom: 20, left: 30}; 
+  var width = 270 - margin.left - margin.right,
+    height = 630 - margin.top - margin.bottom;
+  
+    var svg = d3.select(selector)
     .append('svg')
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
+    .attr("height", height + margin.top + margin.bottom);
+    
+    svg = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
- 
-  render($scope, svg, dataset, width, height);
-})
+    render($scope, svg, dataset, width, height);
+    
+    return svg;
+}
+
 
 function render($scope, svg, dataset, width, height) {
   var numSamples = dataset.length;
