@@ -13,7 +13,7 @@ def dummySeismicGenerator(r):
 @app.route('/api/model/<levelid>')
 def get_model(levelid):
   filename = 'model' + str(levelid) + '.txt';
-  return app.send_static_file('Data/' + filename)
+  return app.send_static_file('data/' + filename)
 
 @app.route('/api/forward', methods=['POST'])
 def get_forward_model():
