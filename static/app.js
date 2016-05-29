@@ -61,9 +61,9 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       alert(response.error)
     });
   
- var margin = {top: 30, right: 10, bottom: 20, left: 15}; 
+ var margin = {top: 30, right: 10, bottom: 20, left: 30}; 
   var width = 270 - margin.left - margin.right,
-    height = 580 - margin.top - margin.bottom;
+    height = 630 - margin.top - margin.bottom;
   
   var numSamples = 100
   var barHeight = height/numSamples;
@@ -98,6 +98,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   var xScale = d3.scale.linear()
     .domain([0, extent])
     .range([0, width/2])
+
     
   svg.selectAll("rect")
     .data(dataset)
@@ -110,11 +111,12 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
         return (width/2) + xScale(d);
      })
     .attr("y", function(d, i) {
+      console.log("i",i)
       return i * barHeight;
     })
     .attr("width", function(d) { 
       if (d < 0) d *= -1;
-      return xScale(d);
+      return xScale(d); 
     })
     .attr('height', barHeight - 1);
       
@@ -132,6 +134,16 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     .attr("class", "axis")
     .call(xAxis);
   
+  var yAxisScale = d3.scale.linear()
+    .domain([0, numSamples])
+    .range([0, height]);
+
+  var yAxis = d3.svg.axis();
+    yAxis.scale(yAxisScale).orient("left");
+    svg.append("g")
+      .attr("class","axis")
+      .call(yAxis);
+
 
 
 })
