@@ -45,7 +45,7 @@ function plotWiggles(selector, data, range) {
  
 myApp.controller('GameController',function($scope, $stateParams, $http) {
   $scope.tries = 5;
-    
+  $scope.ruler = 0;
   $scope.seismic = [];
   $scope.model = [];
   
@@ -61,14 +61,12 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       alert(response.error)
     });
   
- var margin = {top: 30, right: 10, bottom: 20, left: 30}; 
+ var margin = {top: 30, right: 30, bottom: 20, left: 30}; 
   var width = 270 - margin.left - margin.right,
     height = 630 - margin.top - margin.bottom;
   
-  var numSamples = 300
-  var barHeight = height/numSamples;
   var dataset = []
-  for (var i = 0; i < numSamples; i++)
+  for (var i = 0; i < 300; i++)
     dataset.push(0)  
   
   dataset[0] = 0.1;
@@ -81,8 +79,6 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   dataset[7] = -0.8;
   dataset[8] = 0.9;
   dataset[9] = -1.0;
-  
-
  
 
   var svg = d3.select('#usermodelchart')
@@ -90,14 +86,46 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
  
+  render($scope, svg, dataset, width, height);
+})
+
+function render($scope, svg, dataset, width, height) {
+  var numSamples = dataset.length;
+  var barHeight = height/numSamples;
+  
   var extent = d3.max([Math.abs(d3.min(dataset)), d3.max(dataset)]);
   var xScale = d3.scale.linear()
     .domain([0, extent])
     .range([0, width/2])
+  var yAxisScale = d3.scale.linear()
+    .domain([0, numSamples])
+    .range([0, height]);
 
+  svg.append("rect")
+        .attr({"class": "overlay"})
+        .attr("width", width)
+        .attr("height", height)
+        .on({
+          "mousemove":  function() {
+            var coords = d3.mouse(this);
+            $scope.ruler = Math.round(yAxisScale.invert(coords[1]));
+            $scope.$apply();
+          }, 
+          "click":  function() {
+            var coords = d3.mouse(this);
+            var p = {
+              x: xScale.invert(coords[0]) - extent,
+              y: Math.round( yAxisScale.invert(coords[1]) )
+            };
+            console.log("clicked", p)
+            dataset[p.y] = p.x;
+            console.log("clicked", dataset);
+            render($scope, svg, dataset, width, height);
+          }, 
+        });
     
   svg.selectAll("rect")
     .data(dataset)
@@ -126,27 +154,10 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     .attr("class", "axis")
     .call(xAxis);
   
-  var yAxisScale = d3.scale.linear()
-    .domain([0, numSamples])
-    .range([0, height]);
-
   var yAxis = d3.svg.axis();
     yAxis.scale(yAxisScale).orient("left");
     svg.append("g")
       .attr("class","axis")
       .call(yAxis);
-
-
-  svg.on("click", function() {
-    console.log("click")
-    var coords = d3.mouse(this);
-   
-    var newDataPoint = {
-      x: Math.round( xScale(coords[0])),
-      y: Math.round(coords[1])
-    };
-   
-    console.log("clicked", newDataPoint) 
-  })
-
-})
+  
+}
