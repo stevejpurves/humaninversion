@@ -13,15 +13,15 @@ from signalanalysis import Envelope, CosPhase
 
 '''
 def Decon(tr, w):
-    
+
     ns = len(tr)
     TR = np.fft.fft(tr)
     W = np.fft.fft(w, n=ns)
-    
+
     R = TR*2.0/(W+0.05*max(abs(W)))
     r = np.real(np.fft.ifft(R))
     return r
-'''    
+'''
 r = MarineRandModel(3, 400)
 
 w = Ricker(128, 0.004, 25.0, 90.0)
@@ -39,4 +39,5 @@ plt.plot(Envelope(tr))
 plt.figure()
 plt.plot(GetI(r, 1500.0))
 plt.legend()
+plt.show()
 
