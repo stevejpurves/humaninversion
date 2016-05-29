@@ -39,11 +39,11 @@
 <div class="row" ng-if="scores">
 	<div class="col-xs-8 col-xs-offset-2">
 		<h2>Here's your Score!</h2>
-		<ul>
-			<li>Energy Difference => {{scores.Ediff | number:2}}%</li>
-			<li>Energy => {{scores.Energy | number:2}}%</li>
-			<li>Correlation => {{scores.coor | number:2}}%</li>
-			<li>Total Similarity => {{scores.total | number:2}}%</li>
-		</ul>
+		<table class="table">
+			<tr><td>Energy Difference</td><td>{{scores.Ediff | number:2}}%</td></tr>
+			<tr><td>Energy</td><td>{{scores.Energy | number:2}}%</td></tr>
+			<tr><td>Correlation</td><td>{{scores.coor | number:2}}%</td></tr>
+			<tr><td>Total Similarity</td><td>{{scores.total | number:2}}%</td></tr>			
+		</table>
 	</div>
 </div>
