@@ -5,6 +5,7 @@ Created on Sat May 28 07:07:29 2016
 @author: Carlos
 """
 import numpy as np
+from ricker import Ricker
 '''
 ####Functions####
 Function Noise: creates gaussian noise. The standard deviaton is a
@@ -151,3 +152,9 @@ def MarineRandModel(nr, ns=500, fstlayer=25):
         R[int(pos)] = r[i]
         
     return R
+    
+def UserModeling(r):
+    w = Ricker(ns=128, dt=0.004, fp=10.0,phase=0.0)
+    tr = ConvModel(r, w,perc=1.0)
+    
+    return tr

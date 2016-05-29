@@ -1,6 +1,9 @@
+import sys
+sys.path.append('..\\src')
 from flask import Flask, request, send_from_directory, jsonify
 import json
-import numpy as np;
+import numpy as np
+from modeling import UserModeling
 
 app = Flask(__name__, static_url_path='')
 
@@ -18,7 +21,7 @@ def get_model(levelid):
 @app.route('/api/forward', methods=['POST'])
 def get_forward_model():
   r = request.json['usermodel']
-  tr = dummySeismicGenerator(r)
+  tr = UserModeling(r)
   return jsonify(tr)
 
 @app.route('/')
