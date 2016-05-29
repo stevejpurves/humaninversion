@@ -21,7 +21,7 @@ def get_model(levelid):
 @app.route('/api/forward', methods=['POST'])
 def get_forward_model():
   r = request.json['usermodel']
-  print("forward",r)
+  print("forward", r)
   tr = UserModeling(r)
   return jsonify({"seismic": list(tr)})
 

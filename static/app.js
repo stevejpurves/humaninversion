@@ -51,16 +51,17 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   $scope.userseismic = [];
   $scope.realmodel = [];
   $scope.showRealModel = false;
+  $scope.dataRange = [-0.6,0.6];
   
   $scope.doTry = function() {
       $scope.tries -= 1;
+      
       var data = {usermodel: $scope.usermodel};
-      $http.post('/api/forward', data)
+      $http.post('/api/forward', data, {headers: {'Content-Type': 'application/json'}})
         .then(function(resp) {
-          console.log(resp)
-          // $scope.usermodel = 
-        }, function() {
-          
+          $scope.userseismic = resp.data.seismic;
+          $('#userseismic svg').remove();
+          plotWiggles('#userseismic', $scope.userseismic, $scope.dataRange); 
         })
   }
   
@@ -72,33 +73,20 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     .then(function(response) {
       $scope.seismic = response.data.seismic;
       $scope.realmodel = response.data.reflectivity;
+      if (response.data.min)
+        $scope.dataRange = [response.data.min, response.data.max];
       
-      plotWiggles('#seismic', $scope.seismic, [-0.6, 0.6]);
-      plotWiggles('#userseismic', $scope.seismic, [-0.6, 0.6]);
+      plotWiggles('#seismic', $scope.seismic, $scope.dataRange);
       $scope.realModelChart = createBarPlot($scope, '#realmodelchart', $scope.realmodel);
 
     }, function(response) {
       alert(response.error)
     });
   
-    
-  
-  var dataset = []
   for (var i = 0; i < 300; i++)
-    dataset.push(0)  
-  
-  dataset[0] = 0.1;
-  dataset[1] = -0.2;
-  dataset[2] = 0.3;
-  dataset[3] = -0.4;
-  dataset[4] = 0.5;
-  dataset[5] = -0.6;
-  dataset[6] = 0.7;
-  dataset[7] = -0.8;
-  dataset[8] = 0.9;
-  dataset[9] = -1.0;
+    $scope.usermodel.push(0)
  
-  $scope.usermodel = createBarPlot($scope, '#usermodelchart', dataset);
+  $scope.userModelChart = createBarPlot($scope, '#usermodelchart', $scope.usermodel);
   
 })
 
@@ -125,9 +113,7 @@ function render($scope, svg, dataset, width, height) {
   var numSamples = dataset.length;
   var barHeight = height/numSamples;
   
-  console.log("render", dataset)
-  
-  var extent = d3.max([Math.abs(d3.min(dataset)), d3.max(dataset)]);
+  var extent = d3.max([Math.abs($scope.dataRange[0]), $scope.dataRange[1]]);
   var xScale = d3.scale.linear()
     .domain([0, extent])
     .range([0, width/2])
@@ -151,10 +137,9 @@ function render($scope, svg, dataset, width, height) {
               x: xScale.invert(coords[0]) - extent,
               y: Math.round( yAxisScale.invert(coords[1]) )
             };
-            console.log("clicked", p)
             dataset[p.y] = p.x;
-            console.log("clicked", dataset);
-            render($scope, svg, dataset, width, height);
+            $('#usermodelchart svg').remove();
+            createBarPlot($scope, '#usermodelchart', dataset);
           }, 
         });
     
@@ -171,7 +156,6 @@ function render($scope, svg, dataset, width, height) {
       return i * barHeight;
     })
     .attr("width", function(d) { 
-      console.log("rect width", d)
       if (d < 0) d *= -1;
       return xScale(d); 
     })

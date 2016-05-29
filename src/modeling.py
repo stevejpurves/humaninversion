@@ -180,7 +180,7 @@ def RandomTrace():
     tr: seismic trace (numpy array)
     '''
     r = MarineRandModel(30, 300)
-    w = Ricker(128, 0.004, 20.0, 0.0)
+    w = Ricker(128, 0.004, 10.0, 0.0)
     tr = ConvModel(r, w,perc=1.0)
     
     return tr
