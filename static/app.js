@@ -51,18 +51,17 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   $scope.userseismic = [];
   $scope.realmodel = [];
   $scope.showRealModel = false;
+  $scope.dataRange = [-0.6,0.6];
   
   $scope.doTry = function() {
       $scope.tries -= 1;
       
       var data = {usermodel: $scope.usermodel};
-      console.log(data)
       $http.post('/api/forward', data, {headers: {'Content-Type': 'application/json'}})
         .then(function(resp) {
-          console.log(resp)
           $scope.userseismic = resp.data.seismic;
           $('#userseismic svg').remove();
-          plotWiggles('#userseismic', $scope.userseismic, [-0.6, 0.6]); 
+          plotWiggles('#userseismic', $scope.userseismic, $scope.dataRange); 
         }, function(err) {
           alert('Bang!')
         })
@@ -76,8 +75,11 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     .then(function(response) {
       $scope.seismic = response.data.seismic;
       $scope.realmodel = response.data.reflectivity;
+      console.log(response.data)
+      if (response.data.min)
+        $scope.dataRange = [response.data.min, response.data.max];
       
-      plotWiggles('#seismic', $scope.seismic, [-0.6, 0.6]);
+      plotWiggles('#seismic', $scope.seismic, $scope.dataRange);
       $scope.realModelChart = createBarPlot($scope, '#realmodelchart', $scope.realmodel);
 
     }, function(response) {
@@ -87,16 +89,16 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   for (var i = 0; i < 300; i++)
     $scope.usermodel.push(0)  
   
-  $scope.usermodel[0] = 0.1;
-  $scope.usermodel[1] = -0.2;
-  $scope.usermodel[2] = 0.3;
-  $scope.usermodel[3] = -0.4;
-  $scope.usermodel[4] = 0.5;
-  $scope.usermodel[5] = -0.6;
-  $scope.usermodel[6] = 0.7;
-  $scope.usermodel[7] = -0.8;
-  $scope.usermodel[8] = 0.9;
-  $scope.usermodel[9] = -1.0;
+  // $scope.usermodel[0] = 0.1;
+  // $scope.usermodel[1] = -0.2;
+  // $scope.usermodel[2] = 0.3;
+  // $scope.usermodel[3] = -0.4;
+  // $scope.usermodel[4] = 0.5;
+  // $scope.usermodel[5] = -0.6;
+  // $scope.usermodel[6] = 0.7;
+  // $scope.usermodel[7] = -0.8;
+  // $scope.usermodel[8] = 0.9;
+  // $scope.usermodel[9] = -1.0;
  
   $scope.userModelChart = createBarPlot($scope, '#usermodelchart', $scope.usermodel);
   
@@ -125,9 +127,7 @@ function render($scope, svg, dataset, width, height) {
   var numSamples = dataset.length;
   var barHeight = height/numSamples;
   
-  console.log("render", dataset)
-  
-  var extent = d3.max([Math.abs(d3.min(dataset)), d3.max(dataset)]);
+  var extent = d3.max([Math.abs($scope.dataRange[0]), $scope.dataRange[1]]);
   var xScale = d3.scale.linear()
     .domain([0, extent])
     .range([0, width/2])
@@ -151,12 +151,9 @@ function render($scope, svg, dataset, width, height) {
               x: xScale.invert(coords[0]) - extent,
               y: Math.round( yAxisScale.invert(coords[1]) )
             };
-            console.log("clicked", p)
             dataset[p.y] = p.x;
-            console.log("clicked", dataset);
             $('#usermodelchart svg').remove();
             createBarPlot($scope, '#usermodelchart', dataset);
-            // render($scope, svg, dataset, width, height);
           }, 
         });
     
@@ -173,7 +170,6 @@ function render($scope, svg, dataset, width, height) {
       return i * barHeight;
     })
     .attr("width", function(d) { 
-      console.log("rect width", d)
       if (d < 0) d *= -1;
       return xScale(d); 
     })
