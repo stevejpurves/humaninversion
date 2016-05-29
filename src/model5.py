@@ -19,7 +19,7 @@ from util import fixpath
 
 r = MarineRandModel(4, 300)
 
-w = Ricker(128, 0.004, 9.0, 0.0)
+w = Ricker(128, 0.004, 10.0, 0.0)
 tr = ConvModel(r, w, perc=1.0)
 
 # trmin = np.min(tr)
