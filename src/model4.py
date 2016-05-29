@@ -20,7 +20,7 @@ r[30] = 0.3
 r[150] = 0.15
 r[160] = -0.1
 '''
-w = Ricker(128, 0.004, 20.0, 0.0)
+w = Ricker(128, 0.004, 10.0, 0.0)
 tr = ConvModel(r, w,perc=1.0)
 I = GetI(r, 1500.0)
 env = Envelope(tr)
