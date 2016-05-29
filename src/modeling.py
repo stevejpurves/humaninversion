@@ -54,7 +54,8 @@ def ConvModel(r, w, perc=1.0):
     tr: synthetic seismic trace (Array)
     '''
     tr = np.convolve(r, w, 'same')
-    tr = tr + Noise(tr, perc=1.0)
+    if perc != 0:
+        tr = tr + Noise(tr, perc)
     return tr
 
 def GetR(I):
