@@ -29,73 +29,105 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     });
 });
  
-myApp.controller('GameController',function($scope, $stateParams, $http) {
+ 
+function plotWiggles(selector, data, range) {
+   var wigglePlot = g3.plot(selector)
+    .height(580)
+    .xTicks(7)
+    .xDomain(range)
+    .yDomain([0, data.length])
+    .draw();
   
+  var wig = g3.wiggle(wigglePlot, [data])
+    .xTrans(0)
+    .draw();
+} 
+ 
+myApp.controller('GameController',function($scope, $stateParams, $http) {
+  $scope.tries = 5;
+    
   $scope.seismic = [];
   $scope.model = [];
-  // for (var i = 0; i < 256; i++) {
-  //   $scope.seismic.push(Math.sin(2*Math.PI*i/64))
-  // }
   
   $http({method: 'GET', url: '/api/model/1'})
     .then(function(response) {
       $scope.seismic = response.data.seismic;
       $scope.model = response.data.model;
       
-    var wigglePlot = g3.plot('#realseismic')
-      .height(580)
-      .xDomain([-1, 1])
-      .yDomain([0, $scope.seismic.length])
-      .draw();
-    
-    var wig = g3.wiggle(wigglePlot, [$scope.seismic])
-      .xTrans(0)
-      .draw();
-  
-    var wigglePlot = g3.plot('#userseismic')
-      .height(580)
-      .xDomain([-1, 1])
-      .yDomain([0, $scope.seismic.length])
-      .draw();
-    
-    var wig = g3.wiggle(wigglePlot, [$scope.seismic])
-      .xTrans(0)
-      .draw();
-      
-      
-      
+      plotWiggles('#seismic', $scope.seismic, [-0.6, 0.6]);
+      plotWiggles('#userseismic', $scope.seismic, [-0.6, 0.6]);
+
     }, function(response) {
       alert(response.error)
+    });
+  
+ var margin = {top: 20, right: 10, bottom: 20, left: 10}; 
+  var width = 200 - margin.left - margin.right,
+    height = 580 - margin.top - margin.bottom;
+  
+  var numSamples = 100
+  var barHeight = height/numSamples;
+  var dataset = []
+  for (var i = 0; i < numSamples; i++)
+    dataset.push(0)  
+  
+  dataset[0] = 0.1;
+  dataset[1] = -0.2;
+  dataset[2] = 0.3;
+  dataset[3] = -0.4;
+  dataset[4] = 0.5;
+  dataset[5] = -0.6;
+  dataset[6] = 0.7;
+  dataset[7] = -0.8;
+  dataset[8] = 0.9;
+  dataset[9] = -1.0;
+  // dataset[2] = -0.1;
+  // dataset[3] = -1;
+
+ 
+
+  var svg = d3.select('#usermodelchart')
+    .append('svg')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  console.log(d3.min(dataset))
+  var extent = d3.max([Math.abs(d3.min(dataset)), d3.max(dataset)]);
+  var xScale = d3.scale.linear()
+    .domain([0, extent])
+    .range([0, width/2])
+    
+  svg.selectAll("rect")
+    .data(dataset)
+    .enter().append("rect")
+    .attr("x", function(d) {
+      console.log(d) 
+      if (d >= 0)
+        return (width/2);
+      else
+        return (width/2) + xScale(d);
+     })
+    .attr("y", function(d, i) {
+      return i * barHeight;
     })
-  
-  
+    .attr("width", function(d) { 
+      if (d < 0) d *= -1;
+      return xScale(d);
+    })
+    .attr('height', barHeight - 1);
+      
+  svg.on("click", function() {
+    var coords = d3.mouse(this);
+    
+  })
 
 
+  var xAxis = d3.svg.axis();
+  xAxis.scale(xScale).orient("top");
+  svg.append("g").call(xAxis);
   
-  $scope.tries = 0;
-  
-  $scope.data = {
-    seismic: [
-      {x:0, val_0: 10},
-      {x:1, val_0: 15},
-      {x:2, val_0: 18}
-    ]
-  };
-  
-  $scope.seismicOptions = {
-      series: [
-        {
-          axis: "x",
-          dataset: "seismic",
-          key: "val_0",
-          label: "Seismic Series",
-          color: "#ff0000",
-          type: ['column'],
-          id: "seismic",
-          visible:true
-        }
-      ],
-      axes: { y: { key: "x"} }
-  };
+
 
 })
