@@ -17,15 +17,14 @@ from signalanalysis import Envelope, CosPhase
 r = np.zeros(300)
 r[30] = 0.3
 r[150] = 0.15
-r[160] = -0.1
-w = Ricker(128, 0.004, 10.0, 0.0)
+w = Ricker(128, 0.004, 10.0, 90.0)
 tr = ConvModel(r, w,perc=1.0)
 I = GetI(r, 1500.0)
 env = Envelope(tr)
 data = { 'reflectivity':list(r), 'impedance:':list(I) ,'seismic':list(tr),
 'envelope': list(env), 'min':np.min(tr), 'max':np.max(tr) }
 
-with open('../static/data/model3.txt', 'w') as outfile:
+with open('../static/data/model2.txt', 'w') as outfile:
     json.dump(data, outfile)
 #r2 = Decon(tr, w)
 plt.plot(r, 'k', linewidth=3, label='Random Reflectivity')
