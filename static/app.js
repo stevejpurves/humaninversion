@@ -78,15 +78,13 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       
       plotWiggles('#seismic', $scope.seismic, $scope.dataRange);
       $scope.realModelChart = createBarPlot($scope, '#realmodelchart', $scope.realmodel);
-
+      $scope.userModelChart = createBarPlot($scope, '#usermodelchart', $scope.usermodel);
     }, function(response) {
       alert(response.error)
     });
   
   for (var i = 0; i < 300; i++)
     $scope.usermodel.push(0)
- 
-  $scope.userModelChart = createBarPlot($scope, '#usermodelchart', $scope.usermodel);
   
 })
 
@@ -174,6 +172,21 @@ function render($scope, svg, dataset, width, height) {
     yAxis.scale(yAxisScale).orient("left");
     svg.append("g")
       .attr("class","axis")
+      .attr("transform", "translate(" + width/2 + ",0)")
       .call(yAxis);
  
+}
+
+function make_x_axis() {        
+    return d3.svg.axis()
+        .scale(x)
+         .orient("bottom")
+         .ticks(5)
+}
+
+function make_y_axis() {        
+    return d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(5)
 }
