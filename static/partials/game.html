@@ -25,14 +25,25 @@
 			You need to 
 			<button ng-click="doTry()" class="btn btn-danger">Run Your Model</button>
 			<span id="triesLeft">to see seismic generated from your inversion, <span ng-class='{"amber":tries<5, "argh":tries==1}'>but you only have {{tries}} tries left!</span></span>
+			Remember you can <button ng-click="clearPicks()" class='btn btn-danger'>Clear Your current picks</button>
 		</div>
-		<div id="reveal" ng-if='tries<5'>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 text-right controls">		
+		<div id="reveal" ng-if='tries<5' class="margin-top-10">
 			Now you can reveal the true model <button ng-click='doReveal()' class="btn btn-success">Reveal</button>
 		</div>
 	</div>
 </div>
 <div class="row" ng-if="scores">
 	<div class="col-xs-8 col-xs-offset-2">
-		{{scores | json}}
+		<h2>Here's your Score!</h2>
+		<ul>
+			<li>Energy Difference => {{scores.Ediff | number:2}}%</li>
+			<li>Energy => {{scores.Energy | number:2}}%</li>
+			<li>Correlation => {{scores.coor | number:2}}%</li>
+			<li>Total Similarity => {{scores.total | number:2}}%</li>
+		</ul>
 	</div>
 </div>

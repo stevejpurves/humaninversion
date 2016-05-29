@@ -66,6 +66,14 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
         })
   }
   
+  $scope.clearPicks = function() {
+    $scope.usermodel = [];
+    for (var i = 0; i < 300; i++)
+      $scope.usermodel.push(0)
+    $('#usermodelchart svg').remove();
+    createBarPlot($scope, '#usermodelchart', $scope.usermodel);
+  }
+  
   $scope.doReveal = function() {
     $scope.showRealModel = true;
     
