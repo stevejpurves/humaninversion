@@ -12,7 +12,7 @@ def dummySeismicGenerator(r):
 
 @app.route('/api/model/<levelid>')
 def get_model(levelid):
-  filename = 'Model' + str(levelid) + '.txt';
+  filename = 'model' + str(levelid) + '.txt';
   return app.send_static_file('Data/' + filename)
 
 @app.route('/api/forward', methods=['POST'])
@@ -29,6 +29,6 @@ def root():
 def static_proxy(path):
   # send_static_file will guess the correct MIME type
   return app.send_static_file(path)
-    
+
 if __name__ == "__main__":
     app.run(debug=True)
