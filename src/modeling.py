@@ -155,7 +155,6 @@ def MarineRandModel(nr, ns=500, fstlayer=25):
     
 def UserModeling(r):
     r = np.asarray(r)
-    print(r)
     w = Ricker(ns=128, dt=0.004, fp=10.0,phase=0.0)
     tr = ConvModel(r, w,perc=1.0)
     
