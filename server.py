@@ -1,5 +1,5 @@
 import sys
-sys.path.append('..\\src')
+sys.path.append('src')
 from flask import Flask, request, send_from_directory, jsonify
 import json
 import numpy as np
@@ -21,8 +21,9 @@ def get_model(levelid):
 @app.route('/api/forward', methods=['POST'])
 def get_forward_model():
   r = request.json['usermodel']
+  print("forward",r)
   tr = UserModeling(r)
-  return jsonify(tr)
+  return jsonify({"seismic": list(tr)})
 
 @app.route('/')
 def root():

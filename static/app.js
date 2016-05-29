@@ -54,6 +54,14 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   
   $scope.doTry = function() {
       $scope.tries -= 1;
+      var data = {usermodel: $scope.usermodel};
+      $http.post('/api/forward', data)
+        .then(function(resp) {
+          console.log(resp)
+          // $scope.usermodel = 
+        }, function() {
+          
+        })
   }
   
   $scope.doReveal = function() {
@@ -117,6 +125,8 @@ function render($scope, svg, dataset, width, height) {
   var numSamples = dataset.length;
   var barHeight = height/numSamples;
   
+  console.log("render", dataset)
+  
   var extent = d3.max([Math.abs(d3.min(dataset)), d3.max(dataset)]);
   var xScale = d3.scale.linear()
     .domain([0, extent])
@@ -161,6 +171,7 @@ function render($scope, svg, dataset, width, height) {
       return i * barHeight;
     })
     .attr("width", function(d) { 
+      console.log("rect width", d)
       if (d < 0) d *= -1;
       return xScale(d); 
     })
@@ -180,5 +191,5 @@ function render($scope, svg, dataset, width, height) {
     svg.append("g")
       .attr("class","axis")
       .call(yAxis);
-  
+ 
 }
