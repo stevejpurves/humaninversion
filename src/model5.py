@@ -13,14 +13,14 @@ from signalanalysis import Envelope, CosPhase
 
 r = MarineRandModel(4, 300)
 
-w = Ricker(128, 0.004, 25.0, 0.0)
+w = Ricker(128, 0.004, 9.0, 0.0)
 tr = ConvModel(r, w, perc=1.0)
 
-trmin = np.min(tr)
-trmax = np.max(tr)
+# trmin = np.min(tr)
+# trmax = np.max(tr)
 
-print trmin
-print trmax
+# print trmin
+# print trmax
 
 I = GetI(r, 1500.0)
 env = Envelope(tr)
@@ -32,7 +32,7 @@ env = Envelope(tr)
 # tr = ConvModel(r, w,perc=1.0)
 
 data = { 'reflectivity':list(r), 'impedance:':list(I) ,'seismic':list(tr),
-'envelope': list(env), 'min':trmin, 'max':trmax }
+'envelope': list(env), 'min':np.min(tr), 'max':np.max(tr) }
 
 
 with open('../static/data/model5.txt', 'w') as outfile:

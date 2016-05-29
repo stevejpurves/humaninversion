@@ -21,7 +21,8 @@ w = Ricker(128, 0.004, 10.0, 0.0)
 tr = ConvModel(r, w,perc=1.0)
 I = GetI(r, 1500.0)
 env = Envelope(tr)
-data = { 'reflectivity':list(r), 'impedance:':list(I) ,'seismic':list(tr), 'envelope': list(env)}
+data = { 'reflectivity':list(r), 'impedance:':list(I) ,'seismic':list(tr),
+'envelope': list(env), 'min':np.min(tr), 'max':np.max(tr)}
 
 with open('..\static\data\model1.txt', 'w') as outfile:
     json.dump(data, outfile)
@@ -33,4 +34,5 @@ plt.plot(env)
 plt.figure()
 plt.plot(I)
 plt.legend()
+plt.show()
 
