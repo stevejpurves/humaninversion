@@ -22,22 +22,28 @@ def Decon(tr, w):
     r = np.real(np.fft.ifft(R))
     return r
 '''
-r = MarineRandModel(3, 400)
+r = MarineRandModel(5, 300)
 
 w = Ricker(128, 0.004, 25.0, 90.0)
 tr = ConvModel(r, w,perc=1.0)
 
-data = {'seismic':list(tr), 'model':list(r)}
+trmin = np.min(tr)
+trmax = np.max(tr)
 
-#with open('../Data/Model1.txt', 'w') as outfile:
-#    json.dump(data, outfile)
-#r2 = Decon(tr, w)
-plt.plot(r, 'k', linewidth=3, label='Random Reflectivity')
-plt.plot(data['seismic'], label='Trace')
-plt.plot(Envelope(tr))
+# print trmin
+# print trmax
 
-plt.figure()
-plt.plot(GetI(r, 1500.0))
-plt.legend()
-plt.show()
+data = {'seismic':list(tr), 'model':list(r), 'min':trmin, 'max':trmax}
+
+with open('../static/data/model5.txt', 'w') as outfile:
+   json.dump(data, outfile)
+# r2 = Decon(tr, w)
+# plt.plot(r, 'k', linewidth=3, label='Random Reflectivity')
+# plt.plot(data['seismic'], label='Trace')
+# plt.plot(Envelope(tr))
+
+# plt.figure()
+# plt.plot(GetI(r, 1500.0))
+# plt.legend()
+# plt.show()
 
