@@ -34,7 +34,7 @@ def Rotation(w,phase):
     phase: phase rotation (scalar, unit: radians)
     
     Outpout:
-    w_rot: rotated signal (array)
+    wrot: rotated signal (array)
     '''  
     hw = hilbert(w) #Returns analytic signal        
     wrot = w*np.cos(phase) + hw.imag*np.sin(phase) #Applies rotation
@@ -199,3 +199,4 @@ def CosPhase(d):
     cosphase = np.cos(np.angle(asig))
     
     return cosphase
+
