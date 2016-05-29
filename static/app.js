@@ -61,8 +61,8 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       alert(response.error)
     });
   
- var margin = {top: 20, right: 10, bottom: 20, left: 10}; 
-  var width = 200 - margin.left - margin.right,
+ var margin = {top: 30, right: 10, bottom: 20, left: 15}; 
+  var width = 270 - margin.left - margin.right,
     height = 580 - margin.top - margin.bottom;
   
   var numSamples = 100
@@ -123,10 +123,14 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     
   })
 
-
+  var xAxisScale = d3.scale.linear()
+    .domain([-extent, extent])
+    .range([0, width])
   var xAxis = d3.svg.axis();
-  xAxis.scale(xScale).orient("top");
-  svg.append("g").call(xAxis);
+  xAxis.scale(xAxisScale).orient("top");
+  svg.append("g")
+    .attr("class", "axis")
+    .call(xAxis);
   
 
 
