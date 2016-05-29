@@ -140,7 +140,7 @@ def MarineRandModel(nr, ns=500, fstlayer=25):
     R: reflectivity sequence (array)
     '''
     nr = nr-1 #Discounting one because seabad is already considered
-    r = np.random.normal(0.0, 0.5,nr)
+    r = np.random.normal(0.0, 0.25,nr)
     R = np.zeros(ns)
     R[fstlayer] = 0.3
     for i in range(nr):
