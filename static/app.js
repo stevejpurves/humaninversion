@@ -52,6 +52,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   $scope.realmodel = [];
   $scope.showRealModel = false;
   $scope.dataRange = [-0.6,0.6];
+  $scope.scores = null;
   
   $scope.doTry = function() {
       $scope.tries -= 1;
@@ -67,6 +68,12 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   
   $scope.doReveal = function() {
     $scope.showRealModel = true;
+    
+    var data = {userseismic: $scope.userseismic, trueseismic: $scope.seismic};
+    $http.post('/api/scores', data, {headers: {'Content-Type': 'application/json'}})
+      .then(function(resp) {
+        $scope.scores = resp.data;
+      })
   }
   
   $http({method: 'GET', url: '/api/model/' + $stateParams.level})

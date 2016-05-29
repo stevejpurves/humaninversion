@@ -31,4 +31,8 @@
 		</div>
 	</div>
 </div>
-{{levelData | json}}
+<div class="row" ng-if="scores">
+	<div class="col-xs-8 col-xs-offset-2">
+		{{scores | json}}
+	</div>
+</div>

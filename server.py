@@ -26,7 +26,7 @@ def get_forward_model():
   return jsonify({"seismic": list(tr)})
   
 @app.route('/api/scores', methods=['POST'])
-def get_forward_model():
+def get_scores():
   us = request.json['userseismic']
   ts = request.json['trueseismic']
   res = Results(ts, us)
