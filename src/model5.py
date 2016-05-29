@@ -10,7 +10,7 @@ from modeling import ConvModel, RandModel, GetI, MarineRandModel
 import matplotlib.pyplot as plt
 import json
 from signalanalysis import Envelope, CosPhase
-from util import fixpath
+# from util import fixpath
 
 # model_name = 'model5.txt'
 # data_path = fixpath('../static/data')
@@ -20,7 +20,7 @@ from util import fixpath
 r = MarineRandModel(4, 300)
 
 w = Ricker(128, 0.004, 10.0, 0.0)
-tr = ConvModel(r, w, perc=1.0)
+tr = ConvModel(r, w, perc=10.0)
 
 # trmin = np.min(tr)
 # trmax = np.max(tr)
