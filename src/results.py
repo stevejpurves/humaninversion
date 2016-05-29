@@ -9,7 +9,7 @@ import numpy as np
 from signalanalysis import xcorr2
 import matplotlib.pyplot as plt
 import json
-
+from results import Results
 
 def Results(tmodel, umodel):
     '''
@@ -28,7 +28,8 @@ def Results(tmodel, umodel):
     Ediff: energy difference
     
     '''
-
+    tmodel  = np.asarray(tmodel)
+    umodel = np.asarray(umodel)
     Et = sum(tmodel**2.0) #True model energy
     Eu = sum(umodel**2.0) #User model energy
     

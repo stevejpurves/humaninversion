@@ -4,7 +4,7 @@ from flask import Flask, request, send_from_directory, jsonify
 import json
 import numpy as np
 from modeling import UserModeling
-
+from results import Results
 app = Flask(__name__, static_url_path='')
 
 
@@ -24,6 +24,13 @@ def get_forward_model():
   print("forward", r)
   tr = UserModeling(r)
   return jsonify({"seismic": list(tr)})
+  
+@app.route('/api/scores', methods=['POST'])
+def get_forward_model():
+  us = request.json['userseismic']
+  ts = request.json['trueseismic']
+  res = Results(ts, us)
+  return jsonify(res)
 
 @app.route('/')
 def root():
