@@ -24,7 +24,7 @@ env = Envelope(tr)
 data = { 'reflectivity':list(r), 'impedance:':list(I) ,'seismic':list(tr),
 'envelope': list(env), 'min':np.min(tr), 'max':np.max(tr) }
 
-with open('..\static\data\model2.txt', 'w') as outfile:
+with open('../static/data/model2.txt', 'w') as outfile:
     json.dump(data, outfile)
 #r2 = Decon(tr, w)
 plt.plot(r, 'k', linewidth=3, label='Random Reflectivity')
