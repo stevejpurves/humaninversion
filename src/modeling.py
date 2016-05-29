@@ -154,8 +154,34 @@ def MarineRandModel(nr, ns=500, fstlayer=25):
     return R
     
 def UserModeling(r):
+    '''
+    Function UserModeling: models a seismic trace.
+    
+    Input:
+    r: reflectivity sequence (list)
+    
+    Output:
+    tr: seismic trace (array)
+    '''
     r = np.asarray(r)
     w = Ricker(ns=128, dt=0.004, fp=10.0,phase=0.0)
     tr = ConvModel(r, w,perc=1.0)
     
     return tr
+    
+def RandomTrace():
+    '''
+    Function RadomTrace: generate a trace from random reflectivity sequence.
+    
+    Input:
+    None
+    
+    Output:
+    tr: seismic trace (numpy array)
+    '''
+    r = MarineRandModel(30, 300)
+    w = Ricker(128, 0.004, 20.0, 0.0)
+    tr = ConvModel(r, w,perc=1.0)
+    
+    return tr
+
