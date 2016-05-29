@@ -10,6 +10,12 @@ from modeling import ConvModel, RandModel, GetI, MarineRandModel
 import matplotlib.pyplot as plt
 import json
 from signalanalysis import Envelope, CosPhase
+from util import fixpath
+
+# model_name = 'model5.txt'
+# data_path = fixpath('../static/data')
+
+# model = data_path + '/' + model_name
 
 r = MarineRandModel(4, 300)
 
@@ -35,6 +41,7 @@ data = { 'reflectivity':list(r), 'impedance:':list(I) ,'seismic':list(tr),
 'envelope': list(env), 'min':np.min(tr), 'max':np.max(tr) }
 
 
+# with open('../static/data/model5.txt', 'w') as outfile:
 with open('../static/data/model5.txt', 'w') as outfile:
    json.dump(data, outfile)
 
