@@ -1,6 +1,5 @@
 <div class="row">
 	<div class="col-xs-12">
-		{{ruler}}
 		<div id="gamearea">
 			<div id="realseismic" class="graphbox">
 				<h4>Seismic</h4>
@@ -25,9 +24,9 @@
 		<div id="tries" ng-if='tries>0'>
 			You need to 
 			<button ng-click="doTry()" class="btn btn-danger">Run Your Model</button>
-			<span id="triesLeft">to see seismic generated from your inversion, but you only have {{tries}} tries left!</span>
+			<span id="triesLeft">to see seismic generated from your inversion, <span ng-class='{"amber":tries<5, "argh":tries==1}'>but you only have {{tries}} tries left!</span></span>
 		</div>
-		<div id="reveal" ng-if='tries==0'>
+		<div id="reveal" ng-if='tries<5'>
 			Now you can reveal the true model <button ng-click='doReveal()' class="btn btn-success">Reveal</button>
 		</div>
 	</div>
