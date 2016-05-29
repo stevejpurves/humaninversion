@@ -13,8 +13,9 @@
 			<div id="userseismic" class="graphbox">
 				<h4>User's Seismic</h4>
 				</div>
-			<div id="realmodelchart" class="graphbox">
+			<div class="graphbox">
 				<h4>Real Model</h4>
+				<div ng-show='showRealModel' id="realmodelchart"></div>
 			</div>
 		</div>
 	</div>
@@ -23,11 +24,11 @@
 	<div class="col-xs-12 text-right controls">
 		<div id="tries" ng-if='tries>0'>
 			You need to 
-			<button class="btn btn-danger">Run Your Model</button>
+			<button ng-click="doTry()" class="btn btn-danger">Run Your Model</button>
 			<span id="triesLeft">to see seismic generated from your inversion, but you only have {{tries}} tries left!</span>
 		</div>
 		<div id="reveal" ng-if='tries==0'>
-			Now you can reveal the true model <button class="btn btn-danger">Reveal</button>
+			Now you can reveal the true model <button ng-click='doReveal()' class="btn btn-success">Reveal</button>
 		</div>
 	</div>
 </div>

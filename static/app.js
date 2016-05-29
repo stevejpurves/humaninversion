@@ -50,6 +50,15 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   $scope.usermodel = [];
   $scope.userseismic = [];
   $scope.realmodel = [];
+  $scope.showRealModel = false;
+  
+  $scope.doTry = function() {
+      $scope.tries -= 1;
+  }
+  
+  $scope.doReveal = function() {
+    $scope.showRealModel = true;
+  }
   
   $http({method: 'GET', url: '/api/model/' + $stateParams.level})
     .then(function(response) {
