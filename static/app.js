@@ -49,7 +49,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   $scope.seismic = [];
   $scope.model = [];
   
-  $http({method: 'GET', url: '/api/model/1'})
+  $http({method: 'GET', url: '/api/model/' + $stateParams.level})
     .then(function(response) {
       $scope.seismic = response.data.seismic;
       $scope.model = response.data.model;
@@ -65,7 +65,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   var width = 270 - margin.left - margin.right,
     height = 630 - margin.top - margin.bottom;
   
-  var numSamples = 100
+  var numSamples = 300
   var barHeight = height/numSamples;
   var dataset = []
   for (var i = 0; i < numSamples; i++)
@@ -81,8 +81,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
   dataset[7] = -0.8;
   dataset[8] = 0.9;
   dataset[9] = -1.0;
-  // dataset[2] = -0.1;
-  // dataset[3] = -1;
+  
 
  
 
@@ -93,7 +92,7 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  console.log(d3.min(dataset))
+ 
   var extent = d3.max([Math.abs(d3.min(dataset)), d3.max(dataset)]);
   var xScale = d3.scale.linear()
     .domain([0, extent])
@@ -104,14 +103,12 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
     .data(dataset)
     .enter().append("rect")
     .attr("x", function(d) {
-      console.log(d) 
       if (d >= 0)
         return (width/2);
       else
         return (width/2) + xScale(d);
      })
     .attr("y", function(d, i) {
-      console.log("i",i)
       return i * barHeight;
     })
     .attr("width", function(d) { 
@@ -119,11 +116,6 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       return xScale(d); 
     })
     .attr('height', barHeight - 1);
-      
-  svg.on("click", function() {
-    var coords = d3.mouse(this);
-    
-  })
 
   var xAxisScale = d3.scale.linear()
     .domain([-extent, extent])
@@ -145,5 +137,16 @@ myApp.controller('GameController',function($scope, $stateParams, $http) {
       .call(yAxis);
 
 
+  svg.on("click", function() {
+    console.log("click")
+    var coords = d3.mouse(this);
+   
+    var newDataPoint = {
+      x: Math.round( xScale(coords[0])),
+      y: Math.round(coords[1])
+    };
+   
+    console.log("clicked", newDataPoint) 
+  })
 
 })
