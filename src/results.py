@@ -9,7 +9,6 @@ import numpy as np
 from signalanalysis import xcorr2
 import matplotlib.pyplot as plt
 import json
-from results import Results
 
 def Results(tmodel, umodel):
     '''
