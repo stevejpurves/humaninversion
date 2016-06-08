@@ -7,7 +7,11 @@ During the hackathon we build something that approaches Human Inversion which we
 to think of as training levels, that you'd do before starting the harder levels.
 
 ## "Play" Online
-A lots of features that would make this a game (ok, a contest)are still to come but you can still play online here:
+A lots of features that would make this a game (ok, a contest)are still to come but you can still play the Pre-Alpha version online.
+
+Known Issues:
+- Only working in chrome and firefox
+- Only works on larger screens. If you see lots of whitespace, try zooming out.
 
 [http://humaninversion.pythonanywhere.com/](http://humaninversion.pythonanywhere.com/)
 
