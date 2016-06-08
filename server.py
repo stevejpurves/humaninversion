@@ -1,5 +1,6 @@
 import sys
-sys.path.append('src')
+import os
+sys.path.append(os.path.abspath('./src'))
 from flask import Flask, request, send_from_directory, jsonify
 import json
 import numpy as np
