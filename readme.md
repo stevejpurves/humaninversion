@@ -6,9 +6,14 @@ The idea was to challenge users to invert the seimsic trace by guessing the unde
 During the hackathon we build something that approaches Human Inversion which we've called Guess What? It allows you to play 4 fixed levels, which we'd like 
 to think of as training levels, that you'd do before starting the harder levels.
 
+## "Play" Online
+A lots of features that would make this a game (ok, a contest)are still to come but you can still play online here:
+
+[http://humaninversion.pythonanywhere.com/](http://humaninversion.pythonanywhere.com/)
+
 ## Screenshot
 
-![Front Screen](doc/picking_screen.png)
+![Front Screen](doc/picking_screen_scores.png)
 
 
 ## Ideas
